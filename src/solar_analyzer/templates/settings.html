@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Solar Analyzer{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-cog"></i> Settings</h2>
+        <p class="text-muted">Configure your solar monitoring system</p>
+    </div>
+</div>
+
+<!-- Data Sources -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Data Sources</h5>
+            </div>
+            <div class="card-body">
+                <!-- MySunPower API -->
+                <div class="mb-4">
+                    <h6>MySunPower Cloud API</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Access Token</label>
+                            <input type="password" class="form-control" id="sunpower-token" placeholder="Bearer token">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Site Key</label>
+                            <input type="text" class="form-control" id="sunpower-site-key" placeholder="Site key">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-primary w-100" id="test-sunpower">Test</button>
+                        </div>
+                    </div>
+                    <div id="sunpower-status" class="mt-2"></div>
+                </div>
+
+                <hr>
+
+                <!-- PVS6 Local -->
+                <div class="mb-4">
+                    <h6>PVS6 Local Device</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Device IP Address</label>
+                            <input type="text" class="form-control" id="pvs6-host" placeholder="192.168.1.100">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Port</label>
+                            <input type="number" class="form-control" id="pvs6-port" value="80">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-primary w-100" id="test-pvs6">Test</button>
+                        </div>
+                    </div>
+                    <div id="pvs6-status" class="mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data Collection Settings -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Data Collection</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Collection Interval (seconds)</label>
+                        <input type="number" class="form-control" id="collection-interval" value="300" min="60">
+                        <small class="text-muted">How often to fetch new data (minimum 60 seconds)</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Data Retention (days)</label>
+                        <input type="number" class="form-control" id="retention-days" value="365" min="30">
+                        <small class="text-muted">How long to keep historical data</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Information -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">System Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <td>Application Version:</td>
+                            <td id="app-version">--</td>
+                        </tr>
+                        <tr>
+                            <td>Database Records:</td>
+                            <td id="db-records">--</td>
+                        </tr>
+                        <tr>
+                            <td>Oldest Record:</td>
+                            <td id="oldest-record">--</td>
+                        </tr>
+                        <tr>
+                            <td>Last Sync:</td>
+                            <td id="last-sync">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Actions</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-success" id="sync-now">
+                    <i class="fas fa-sync"></i> Sync Now
+                </button>
+                <button class="btn btn-warning" id="clear-cache">
+                    <i class="fas fa-broom"></i> Clear Cache
+                </button>
+                <button class="btn btn-danger" id="reset-data" data-bs-toggle="modal" data-bs-target="#resetModal">
+                    <i class="fas fa-trash"></i> Reset All Data
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Confirmation Modal -->
+<div class="modal fade" id="resetModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Reset</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete all historical data? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-reset">Delete All Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/settings.js"></script>
+{% endblock %}

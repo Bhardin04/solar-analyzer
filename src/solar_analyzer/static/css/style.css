@@ -1,0 +1,214 @@
+/* Solar Analyzer Custom Styles */
+
+:root {
+    --primary-color: #0062cc;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* Card Enhancements */
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+/* Navigation */
+.navbar-brand {
+    font-weight: bold;
+}
+
+.navbar .nav-link {
+    transition: all 0.2s;
+}
+
+.navbar .nav-link:hover {
+    transform: translateY(-2px);
+}
+
+/* Dashboard Cards */
+.card h2 {
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+/* Power Flow Animation */
+.power-flow {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}
+
+.power-node {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.power-node.solar {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.power-node.home {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    bottom: 20px;
+    left: 20%;
+}
+
+.power-node.grid {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    bottom: 20px;
+    right: 20%;
+}
+
+.power-flow-line {
+    position: absolute;
+    height: 3px;
+    background: #28a745;
+    transform-origin: left center;
+    transition: all 0.3s;
+}
+
+.power-flow-line.active {
+    animation: flow 2s linear infinite;
+}
+
+@keyframes flow {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 20px 0;
+    }
+}
+
+/* Panel Grid Styles */
+.panel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
+
+.panel-item {
+    aspect-ratio: 1;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.panel-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.panel-item.producing {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.panel-item.low-production {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    color: white;
+}
+
+.panel-item.not-producing {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+/* Loading Spinner */
+.spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.1em;
+}
+
+/* Status Badge */
+.badge.status-ok {
+    background-color: var(--success-color);
+}
+
+.badge.status-warning {
+    background-color: var(--warning-color);
+}
+
+.badge.status-error {
+    background-color: var(--danger-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card h2 {
+        font-size: 2rem;
+    }
+    
+    .panel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+.footer {
+    margin-top: auto;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}

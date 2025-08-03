@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Solar Analyzer{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Current Production Card -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-bolt"></i> Current Production
+                </h5>
+                <h2 class="mb-0" id="current-production">-- kW</h2>
+                <small>Power being generated</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Consumption Card -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-home"></i> Current Consumption
+                </h5>
+                <h2 class="mb-0" id="current-consumption">-- kW</h2>
+                <small>Power being used</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid Status Card -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-plug"></i> Grid
+                </h5>
+                <h2 class="mb-0" id="grid-status">-- kW</h2>
+                <small id="grid-direction">--</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Energy Card -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-calendar-day"></i> Today's Energy
+                </h5>
+                <h2 class="mb-0" id="today-energy">-- kWh</h2>
+                <small>Total produced today</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Power Flow Visualization -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-diagram-project"></i> Power Flow
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="power-flow-container" style="height: 300px;">
+                    <canvas id="power-flow-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row">
+    <!-- Production Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-area"></i> Production Today
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="production-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Energy Statistics -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie"></i> Energy Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="energy-distribution-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Status -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle"></i> System Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr>
+                                <td>Last Update:</td>
+                                <td id="last-update">--</td>
+                            </tr>
+                            <tr>
+                                <td>System Status:</td>
+                                <td id="system-status">
+                                    <span class="badge bg-secondary">Unknown</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Data Source:</td>
+                                <td id="data-source">--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

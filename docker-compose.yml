@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: solar_user
+      POSTGRES_PASSWORD: solar_password
+      POSTGRES_DB: solar_analyzer
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U solar_user -d solar_analyzer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://solar_user:solar_password@postgres:5432/solar_analyzer
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:

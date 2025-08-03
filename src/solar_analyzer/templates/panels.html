@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Performance - Solar Analyzer{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-th"></i> Panel Performance</h2>
+        <p class="text-muted">Individual panel production monitoring</p>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Panels</h6>
+                <h3 id="total-panels">--</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Production</h6>
+                <h3 id="total-panel-production">-- W</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Average per Panel</h6>
+                <h3 id="average-panel-production">-- W</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Efficiency</h6>
+                <h3 id="panel-efficiency">-- %</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Panel Grid -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Panel Layout</h5>
+            </div>
+            <div class="card-body">
+                <div id="panel-grid" class="panel-grid">
+                    <!-- Panels will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Panel Details Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Panel Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="panel-details-table">
+                        <thead>
+                            <tr>
+                                <th>Panel ID</th>
+                                <th>Serial Number</th>
+                                <th>Power (W)</th>
+                                <th>Voltage (V)</th>
+                                <th>Current (A)</th>
+                                <th>Temperature (°C)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="panel-details-tbody">
+                            <!-- Panel rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.panel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
+
+.panel-item {
+    aspect-ratio: 1;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.panel-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.panel-item.producing {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.panel-item.low-production {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    color: white;
+}
+
+.panel-item.not-producing {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+.panel-id {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.panel-power {
+    font-size: 0.8rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/panels.js"></script>
+{% endblock %}
