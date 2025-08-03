@@ -8,8 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCharts();
     updateDashboard();
     
-    // Set up auto-refresh every 30 seconds
-    updateInterval = setInterval(updateDashboard, 30000);
+    // Set up auto-refresh every 30 seconds (fallback for when WebSocket is not available)
+    updateInterval = setInterval(() => {
+        // Only use polling if WebSocket is not connected
+        if (!solarWebSocket || !solarWebSocket.isConnected) {
+            updateDashboard();
+        }
+    }, 30000);
 });
 
 // Clean up on page unload

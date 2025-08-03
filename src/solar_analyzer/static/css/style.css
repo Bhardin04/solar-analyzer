@@ -206,6 +206,113 @@ main {
     }
 }
 
+/* Connection Status */
+.connection-status {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.connection-status.status-connected {
+    background-color: var(--success-color);
+    color: white;
+    animation: pulse-success 2s infinite;
+}
+
+.connection-status.status-disconnected {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.connection-status.status-reconnecting {
+    background-color: var(--warning-color);
+    color: white;
+    animation: pulse-warning 1s infinite;
+}
+
+.connection-status.status-error {
+    background-color: var(--danger-color);
+    color: white;
+    animation: shake 0.5s ease-in-out;
+}
+
+.connection-status.status-failed {
+    background-color: #6c757d;
+    color: white;
+}
+
+@keyframes pulse-success {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+/* Real-time indicator */
+.realtime-indicator {
+    position: relative;
+    display: inline-block;
+}
+
+.realtime-indicator::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--success-color);
+    border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+}
+
+.realtime-indicator.offline::after {
+    background-color: var(--danger-color);
+    animation: none;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* Enhanced notifications */
+.alert {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.alert.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.alert.alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: var(--warning-color);
+    color: #856404;
+}
+
+.alert.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
 /* Footer */
 .footer {
     margin-top: auto;

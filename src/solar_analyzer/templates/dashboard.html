@@ -133,6 +133,12 @@
                                 <td>Data Source:</td>
                                 <td id="data-source">--</td>
                             </tr>
+                            <tr>
+                                <td>Connection:</td>
+                                <td>
+                                    <span id="connection-status" class="connection-status status-disconnected">Connecting...</span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -143,5 +149,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="/static/js/websocket.js"></script>
 <script src="/static/js/dashboard.js"></script>
 {% endblock %}
