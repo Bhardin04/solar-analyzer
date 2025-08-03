@@ -1,10 +1,9 @@
 """API routes for solar data access."""
 
 from datetime import datetime, timedelta
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import and_, func
+from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -38,10 +37,10 @@ async def get_current_reading(db: AsyncSession = Depends(get_db)):
     return reading
 
 
-@router.get("/readings", response_model=List[SolarReading])
+@router.get("/readings", response_model=list[SolarReading])
 async def get_readings(
-    start: Optional[datetime] = Query(None),
-    end: Optional[datetime] = Query(None),
+    start: datetime | None = Query(None),
+    end: datetime | None = Query(None),
     limit: int = Query(100, ge=1, le=1000),
     db: AsyncSession = Depends(get_db),
 ):
@@ -76,9 +75,9 @@ async def create_reading(
     return db_reading
 
 
-@router.get("/panels", response_model=List[PanelReading])
+@router.get("/panels", response_model=list[PanelReading])
 async def get_panel_readings(
-    timestamp: Optional[datetime] = Query(None),
+    timestamp: datetime | None = Query(None),
     limit: int = Query(100, ge=1, le=1000),
     db: AsyncSession = Depends(get_db),
 ):
@@ -133,7 +132,7 @@ async def get_energy_stats(period: str, db: AsyncSession = Depends(get_db)):
             select(SolarReadingModel).where(SolarReadingModel.timestamp >= start)
         )
         readings = result.scalars().all()
-        
+
         if not readings:
             return EnergyStats(
                 period=period,
@@ -153,7 +152,7 @@ async def get_energy_stats(period: str, db: AsyncSession = Depends(get_db)):
         total_import = sum(max(0, -r.grid_kw) for r in readings)
         peak_production = max(r.production_kw for r in readings)
         avg_production = total_production / len(readings) if readings else 0
-        
+
         # Calculate self-consumption rate
         self_consumption_rate = (
             ((total_production - total_export) / total_production * 100)
@@ -171,7 +170,7 @@ async def get_energy_stats(period: str, db: AsyncSession = Depends(get_db)):
             peak_production_kw=peak_production,
             average_production_kw=avg_production,
         )
-        
+
     except Exception as e:
         # Log the error and return empty stats
         print(f"Error in get_energy_stats: {e}")
@@ -187,7 +186,7 @@ async def get_energy_stats(period: str, db: AsyncSession = Depends(get_db)):
         )
 
 
-@router.get("/status", response_model=List[SystemStatus])
+@router.get("/status", response_model=list[SystemStatus])
 async def get_system_status(
     limit: int = Query(10, ge=1, le=100), db: AsyncSession = Depends(get_db)
 ):

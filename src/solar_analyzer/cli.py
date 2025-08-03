@@ -1,8 +1,9 @@
 """Command line interface for Solar Analyzer."""
 
 import asyncio
+from typing import Annotated
+
 import typer
-from typing_extensions import Annotated
 
 from solar_analyzer.utils.sample_data import create_sample_data
 
@@ -23,7 +24,7 @@ def run(
 ):
     """Run the Solar Analyzer web application."""
     import uvicorn
-    
+
     uvicorn.run(
         "solar_analyzer.main:app",
         host=host,

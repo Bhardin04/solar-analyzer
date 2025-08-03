@@ -19,8 +19,10 @@ A comprehensive Python application to monitor, analyze, and visualize SunPower s
 - **Interactive Charts**: Chart.js visualizations with time-series data
 - **Energy Statistics**: Daily, weekly, monthly, and yearly analysis
 - **Panel-Level Monitoring**: Individual microinverter performance tracking
-- **Power Flow Diagrams**: Visual representation of energy flow
+- **Animated Power Flow**: Dynamic SVG visualization with particle effects
 - **Efficiency Metrics**: Self-consumption rates and optimization insights
+- **Solar Design System**: Professional UI with solar-themed styling
+- **Loading Skeletons**: Smooth loading states for better UX
 
 ### 🔌 **Multiple Data Sources**
 - **PVS6 Local Access**: Direct connection to SunPower PVS6 monitoring device
