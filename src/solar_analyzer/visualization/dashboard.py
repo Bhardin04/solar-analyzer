@@ -1,13 +1,13 @@
 """Dashboard routes for web interface."""
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from solar_analyzer.data.database import get_db
 from solar_analyzer.core import templates
+from solar_analyzer.data.database import get_db
 
 router = APIRouter(tags=["dashboard"])
 

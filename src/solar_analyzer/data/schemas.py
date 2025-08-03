@@ -1,7 +1,6 @@
 """Pydantic schemas for API validation."""
 
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -13,8 +12,8 @@ class SolarReadingBase(BaseModel):
     production_kw: float = Field(..., ge=0)
     consumption_kw: float = Field(..., ge=0)
     grid_kw: float
-    battery_kw: Optional[float] = None
-    battery_soc: Optional[float] = Field(None, ge=0, le=100)
+    battery_kw: float | None = None
+    battery_soc: float | None = Field(None, ge=0, le=100)
 
 
 class SolarReadingCreate(SolarReadingBase):
@@ -38,11 +37,11 @@ class PanelReadingBase(BaseModel):
 
     timestamp: datetime
     panel_id: str
-    serial_number: Optional[str] = None
+    serial_number: str | None = None
     power_w: float = Field(..., ge=0)
-    voltage_v: Optional[float] = Field(None, ge=0)
-    current_a: Optional[float] = Field(None, ge=0)
-    temperature_c: Optional[float] = None
+    voltage_v: float | None = Field(None, ge=0)
+    current_a: float | None = Field(None, ge=0)
+    temperature_c: float | None = None
 
 
 class PanelReadingCreate(PanelReadingBase):
@@ -67,7 +66,7 @@ class SystemStatusBase(BaseModel):
     timestamp: datetime
     status: str = Field(..., pattern="^(OK|WARNING|ERROR)$")
     component: str
-    message: Optional[str] = None
+    message: str | None = None
 
 
 class SystemStatusCreate(SystemStatusBase):

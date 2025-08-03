@@ -5,6 +5,52 @@ All notable changes to the Solar Analyzer project will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Phase 2 Enhancements - Solar Energy Design System
+
+#### Added
+- **Solar Energy Design System**: Comprehensive CSS custom properties for consistent solar-themed styling
+  - Solar color palette (gold, orange, sunset gradients)
+  - Energy state colors (generation green, consumption blue, grid states)
+  - Solar-specific animations (pulse, glow, flow)
+  - Utility classes for solar UI components
+- **Loading Skeleton Components**: Professional loading states replacing "--" placeholders
+  - Animated skeleton loaders for all metric values
+  - Smooth transitions when data loads
+  - Maintains layout stability during loading
+- **Animated SVG Power Flow Visualization**: Real-time energy flow display
+  - Dynamic particle animations showing power direction
+  - Responsive to actual power values
+  - Automatic start/stop based on power levels
+  - Visual indicators for solar generation, home consumption, and grid exchange
+- **Enhanced Connection Status**: Improved WebSocket status indicators
+  - Real-time connection state updates
+  - Visual feedback for connection events
+  - Toast notifications for connection changes
+
+#### Fixed
+- **Database Logging**: Resolved recursive logging issue with SQLAlchemy
+  - Excluded SQLAlchemy engine logs from database handler
+  - Fixed threading and async event loop conflicts
+  - Database logging now working correctly for all log levels
+- **WebSocket Connection**: Fixed client-side connection status display
+  - Added detailed logging for debugging
+  - Improved error handling and recovery
+  - Connection now properly maintained and displayed
+
+#### Changed
+- **Dashboard Styling**: Migrated from inline styles to CSS classes
+  - Cleaner HTML templates
+  - Consistent use of design system variables
+  - Better maintainability and theming support
+
+#### Technical Improvements
+- Updated logging configuration to prevent circular dependencies
+- Enhanced WebSocket client with better error handling
+- Improved CSS architecture with custom properties
+- Added power flow animation JavaScript module
+
 ## [1.0.0] - 2025-08-03
 
 ### 🎉 Initial Release - Complete Solar Monitoring Platform

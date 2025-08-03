@@ -63,6 +63,13 @@ uv run uvicorn solar_analyzer.main:app --reload
 ## Step 6: Access the Dashboard
 Open your browser to: http://localhost:8000
 
+You'll see:
+- Real-time power flow visualization with animated particles
+- Live solar production and consumption metrics
+- WebSocket connection status indicator
+- Professional loading skeletons while data loads
+- Solar-themed UI with golden gradients and energy colors
+
 ## Troubleshooting
 
 ### PostgreSQL Connection Issues

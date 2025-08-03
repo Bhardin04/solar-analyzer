@@ -65,15 +65,32 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Update element text with animation
+// Update element text with animation and skeleton removal
 function updateElement(selector, value, prefix = '', suffix = '') {
     const element = document.querySelector(selector);
     if (element) {
-        element.style.opacity = '0.5';
+        // Remove skeleton loading state
+        const skeleton = element.querySelector('.skeleton');
+        if (skeleton) {
+            skeleton.remove();
+        }
+        
+        // Add updating animation
+        element.classList.add('updating');
+        
+        // Smooth transition
         setTimeout(() => {
-            element.textContent = prefix + value + suffix;
-            element.style.opacity = '1';
-        }, 200);
+            element.innerHTML = `<span class="metric-value">${prefix}${value}</span><span class="metric-unit">${suffix}</span>`;
+            element.classList.remove('updating');
+        }, 300);
+    }
+}
+
+// Show skeleton loading state
+function showSkeleton(selector, type = 'metric') {
+    const element = document.querySelector(selector);
+    if (element && !element.querySelector('.skeleton')) {
+        element.innerHTML = `<div class="skeleton skeleton-${type} d-inline-block"></div>`;
     }
 }
 

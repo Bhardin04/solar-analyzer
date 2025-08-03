@@ -2,15 +2,13 @@
 
 import asyncio
 import os
+from collections.abc import AsyncGenerator, Generator
 from datetime import datetime, timedelta
-from typing import AsyncGenerator, Generator
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-import pytest_asyncio
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
-from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -19,9 +17,8 @@ from solar_analyzer.api.pvs6_local import PVS6LocalAPI
 from solar_analyzer.api.sunpower_cloud import SunPowerCloudAPI
 from solar_analyzer.config import Settings
 from solar_analyzer.data.database import Base, get_db
-from solar_analyzer.data.models import SolarReading, PanelReading, SystemStatus
+from solar_analyzer.data.models import PanelReading, SolarReading
 from solar_analyzer.main import app
-
 
 # Test database URLs
 TEST_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
@@ -57,15 +54,15 @@ async def test_db_engine():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield engine
-    
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-    
+
     await engine.dispose()
 
 
@@ -75,7 +72,7 @@ async def test_db_session(test_db_engine) -> AsyncGenerator[AsyncSession, None]:
     async_session = sessionmaker(
         test_db_engine, class_=AsyncSession, expire_on_commit=False
     )
-    
+
     async with async_session() as session:
         yield session
 
@@ -83,36 +80,36 @@ async def test_db_session(test_db_engine) -> AsyncGenerator[AsyncSession, None]:
 @pytest.fixture
 def test_client(test_db_session, test_settings) -> TestClient:
     """Create test client with dependency overrides."""
-    
+
     async def override_get_db():
         yield test_db_session
-    
+
     def override_get_settings():
         return test_settings
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     client = TestClient(app)
     yield client
-    
+
     app.dependency_overrides.clear()
 
 
 @pytest.fixture
 async def async_test_client(test_db_session, test_settings) -> AsyncGenerator[AsyncClient, None]:
     """Create async test client."""
-    
+
     async def override_get_db():
         yield test_db_session
-    
+
     def override_get_settings():
         return test_settings
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     async with AsyncClient(app=app, base_url="http://test") as client:
         yield client
-    
+
     app.dependency_overrides.clear()
 
 
@@ -203,7 +200,7 @@ async def sample_solar_readings(test_db_session: AsyncSession):
     """Create sample solar readings for testing."""
     base_time = datetime.now()
     readings = []
-    
+
     for i in range(24):  # 24 hours of data
         reading = SolarReading(
             timestamp=base_time - timedelta(hours=i),
@@ -213,7 +210,7 @@ async def sample_solar_readings(test_db_session: AsyncSession):
         )
         readings.append(reading)
         test_db_session.add(reading)
-    
+
     await test_db_session.commit()
     return readings
 
@@ -223,7 +220,7 @@ async def sample_panel_readings(test_db_session: AsyncSession):
     """Create sample panel readings for testing."""
     base_time = datetime.now()
     readings = []
-    
+
     for panel_id in range(1, 6):  # 5 panels
         reading = PanelReading(
             timestamp=base_time,
@@ -236,7 +233,7 @@ async def sample_panel_readings(test_db_session: AsyncSession):
         )
         readings.append(reading)
         test_db_session.add(reading)
-    
+
     await test_db_session.commit()
     return readings
 
@@ -265,7 +262,7 @@ pytestmark = [
 def cleanup_test_db():
     """Clean up test database files after each test."""
     yield
-    
+
     # Remove test database files
     test_files = ["test.db", "test.db-shm", "test.db-wal"]
     for file in test_files:

@@ -6,52 +6,62 @@
 <div class="row">
     <!-- Current Production Card -->
     <div class="col-md-3 mb-4">
-        <div class="card text-white bg-success">
-            <div class="card-body">
-                <h5 class="card-title">
+        <div class="card production-card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-success">
                     <i class="fas fa-bolt"></i> Current Production
                 </h5>
-                <h2 class="mb-0" id="current-production">-- kW</h2>
-                <small>Power being generated</small>
+                <h2 class="mb-0 metric-value" id="current-production">
+                    <div class="skeleton skeleton-metric d-inline-block"></div>
+                </h2>
+                <small class="text-muted">Power being generated</small>
             </div>
         </div>
     </div>
 
     <!-- Current Consumption Card -->
     <div class="col-md-3 mb-4">
-        <div class="card text-white bg-info">
-            <div class="card-body">
-                <h5 class="card-title">
+        <div class="card consumption-card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-info">
                     <i class="fas fa-home"></i> Current Consumption
                 </h5>
-                <h2 class="mb-0" id="current-consumption">-- kW</h2>
-                <small>Power being used</small>
+                <h2 class="mb-0 metric-value" id="current-consumption">
+                    <div class="skeleton skeleton-metric d-inline-block"></div>
+                </h2>
+                <small class="text-muted">Power being used</small>
             </div>
         </div>
     </div>
 
     <!-- Grid Status Card -->
     <div class="col-md-3 mb-4">
-        <div class="card text-white bg-warning">
-            <div class="card-body">
-                <h5 class="card-title">
+        <div class="card grid-card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-warning">
                     <i class="fas fa-plug"></i> Grid
                 </h5>
-                <h2 class="mb-0" id="grid-status">-- kW</h2>
-                <small id="grid-direction">--</small>
+                <h2 class="mb-0 metric-value" id="grid-status">
+                    <div class="skeleton skeleton-metric d-inline-block"></div>
+                </h2>
+                <small class="text-muted" id="grid-direction">
+                    <div class="skeleton skeleton-text small d-inline-block" style="width: 80px;"></div>
+                </small>
             </div>
         </div>
     </div>
 
     <!-- Today's Energy Card -->
     <div class="col-md-3 mb-4">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h5 class="card-title">
+        <div class="card energy-card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-primary">
                     <i class="fas fa-calendar-day"></i> Today's Energy
                 </h5>
-                <h2 class="mb-0" id="today-energy">-- kWh</h2>
-                <small>Total produced today</small>
+                <h2 class="mb-0 metric-value" id="today-energy">
+                    <div class="skeleton skeleton-metric d-inline-block"></div>
+                </h2>
+                <small class="text-muted">Total produced today</small>
             </div>
         </div>
     </div>
@@ -67,8 +77,78 @@
                 </h5>
             </div>
             <div class="card-body">
-                <div id="power-flow-container" style="height: 300px;">
-                    <canvas id="power-flow-chart"></canvas>
+                <div id="power-flow-container" class="power-flow-svg-container">
+                    <svg id="power-flow-svg" viewBox="0 0 800 300" class="w-100 h-100">
+                        <!-- SVG Gradients -->
+                        <defs>
+                            <linearGradient id="solarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FF6B35;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="homeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0074D9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#7FDBFF;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="gridGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2C3E50;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#34495E;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Solar Panel Node -->
+                        <g id="solar-node" class="power-node" transform="translate(400, 50)">
+                            <circle r="40" class="node-bg solar"/>
+                            <text x="0" y="-5" text-anchor="middle" class="node-icon">☀️</text>
+                            <text x="0" y="8" text-anchor="middle" class="node-label">Solar</text>
+                            <text x="0" y="22" text-anchor="middle" class="node-value" id="solar-value">
+                                <tspan class="skeleton skeleton-text small" style="width: 40px;">--</tspan>
+                            </text>
+                        </g>
+                        
+                        <!-- Home Node -->
+                        <g id="home-node" class="power-node" transform="translate(200, 200)">
+                            <circle r="35" class="node-bg home"/>
+                            <text x="0" y="-5" text-anchor="middle" class="node-icon">🏠</text>
+                            <text x="0" y="8" text-anchor="middle" class="node-label">Home</text>
+                            <text x="0" y="22" text-anchor="middle" class="node-value" id="home-value">
+                                <tspan class="skeleton skeleton-text small" style="width: 40px;">--</tspan>
+                            </text>
+                        </g>
+                        
+                        <!-- Grid Node -->
+                        <g id="grid-node" class="power-node" transform="translate(600, 200)">
+                            <circle r="35" class="node-bg grid"/>
+                            <text x="0" y="-5" text-anchor="middle" class="node-icon">⚡</text>
+                            <text x="0" y="8" text-anchor="middle" class="node-label">Grid</text>
+                            <text x="0" y="22" text-anchor="middle" class="node-value" id="grid-value">
+                                <tspan class="skeleton skeleton-text small" style="width: 40px;">--</tspan>
+                            </text>
+                        </g>
+                        
+                        <!-- Power Flow Lines -->
+                        <g id="flow-lines">
+                            <!-- Solar to Home -->  
+                            <line id="solar-home-line" 
+                                  x1="380" y1="85" x2="220" y2="165" 
+                                  class="flow-line"
+                                  stroke-width="4" opacity="0"/>
+                            
+                            <!-- Solar to Grid -->
+                            <line id="solar-grid-line" 
+                                  x1="420" y1="85" x2="580" y2="165"
+                                  class="flow-line" 
+                                  stroke-width="4" opacity="0"/>
+                            
+                            <!-- Grid to Home (Import) -->
+                            <line id="grid-home-line" 
+                                  x1="565" y1="200" x2="235" y2="200"
+                                  class="flow-line import" 
+                                  stroke-width="4" opacity="0"/>
+                        </g>
+                        
+                        <!-- Animated Flow Particles -->
+                        <g id="flow-particles"></g>
+                    </svg>
                 </div>
             </div>
         </div>

@@ -1,11 +1,9 @@
 """MySunPower API client for cloud-based data access."""
 
-import json
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any
 
 import httpx
-from pydantic import BaseModel
 
 from solar_analyzer.config import settings
 
@@ -24,7 +22,7 @@ class SunPowerCloudAPI:
             "Content-Type": "application/json",
         }
 
-    async def get_current_power(self) -> Dict[str, Any]:
+    async def get_current_power(self) -> dict[str, Any]:
         """Get current power production and consumption."""
         query = """
         query CurrentPower($siteKey: String!) {
@@ -54,7 +52,7 @@ class SunPowerCloudAPI:
 
     async def get_energy_data(
         self, start_date: datetime, end_date: datetime, interval: str = "hour"
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Get energy data for a specific time range."""
         query = """
         query EnergyData($siteKey: String!, $startDate: String!, $endDate: String!, $interval: String!) {
@@ -86,7 +84,7 @@ class SunPowerCloudAPI:
             response.raise_for_status()
             return response.json()
 
-    async def get_panel_data(self) -> Dict[str, Any]:
+    async def get_panel_data(self) -> dict[str, Any]:
         """Get individual panel production data."""
         query = """
         query PanelData($siteKey: String!) {
@@ -115,7 +113,7 @@ class SunPowerCloudAPI:
             response.raise_for_status()
             return response.json()
 
-    async def get_system_info(self) -> Dict[str, Any]:
+    async def get_system_info(self) -> dict[str, Any]:
         """Get system information and configuration."""
         query = """
         query SystemInfo($siteKey: String!) {

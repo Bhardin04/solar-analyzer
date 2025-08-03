@@ -1,18 +1,16 @@
 """SQLAlchemy models for solar data."""
 
-from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import (
+    JSON,
     Column,
     DateTime,
     Float,
+    Index,
     Integer,
     String,
     Text,
     UniqueConstraint,
-    Index,
-    JSON,
 )
 from sqlalchemy.sql import func
 

@@ -339,4 +339,54 @@ Transform the Solar Analyzer from a functional monitoring tool into a **best-in-
 
 ---
 
+## 🔄 **Development Strategy Reference**
+
+**All roadmap implementations must follow the Git Strategy defined in [GIT_STRATEGY.md](GIT_STRATEGY.md):**
+
+### **Branch Management for Roadmap Features**
+```bash
+# Phase 2 Features
+git checkout -b feature/phase2-power-flow-viz
+git checkout -b feature/phase2-interactive-charts
+git checkout -b feature/phase2-solar-branding
+
+# Phase 3 Features  
+git checkout -b feature/phase3-time-controls
+git checkout -b feature/phase3-comparisons
+git checkout -b feature/phase3-forecasting
+
+# Phase 4 Features
+git checkout -b feature/phase4-custom-dashboards
+git checkout -b feature/phase4-alert-system
+
+# Phase 5 Features
+git checkout -b feature/phase5-export-system
+git checkout -b feature/phase5-performance-opt
+```
+
+### **Release Cycle Alignment**
+- **Phase 2** → **v1.1.0**: Advanced Visualizations
+- **Phase 3** → **v1.2.0**: Enhanced Analytics  
+- **Phase 4** → **v1.3.0**: User Experience
+- **Phase 5** → **v1.4.0**: Advanced Features
+
+### **Consistent Workflow for Each Feature**
+1. Create feature branch from `develop`
+2. Implement with comprehensive tests
+3. Use conventional commit messages
+4. Open PR to `develop` with proper review
+5. Merge only after CI/CD passes
+6. Update documentation as part of feature
+
+### **Quality Gates**
+- ✅ All tests must pass (`uv run pytest`)
+- ✅ Code quality checks (`uv run ruff check`)
+- ✅ Documentation updated
+- ✅ Performance benchmarks maintained
+- ✅ Security review completed
+
+**📖 Always reference [GIT_STRATEGY.md](GIT_STRATEGY.md) before starting any roadmap feature to ensure consistency with our professional development workflow.**
+
+---
+
 *This roadmap provides a structured path to elevate the Solar Analyzer into a professional-grade energy monitoring platform while maintaining focus on desktop users and core functionality.*

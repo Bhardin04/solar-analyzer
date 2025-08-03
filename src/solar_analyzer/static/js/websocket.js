@@ -36,7 +36,7 @@ class SolarWebSocket {
     }
     
     onOpen() {
-        console.log('WebSocket connected');
+        console.log('WebSocket connected successfully');
         this.isConnected = true;
         this.reconnectAttempts = 0;
         this.reconnectDelay = 1000;
@@ -45,12 +45,15 @@ class SolarWebSocket {
         this.startHeartbeat();
         
         // Request initial data
-        this.send({ type: 'request_data' });
+        const requestSent = this.send({ type: 'request_data' });
+        console.log('Initial data request sent:', requestSent);
         
         // Notify callbacks
+        console.log('Notifying onConnect callbacks:', this.callbacks.onConnect.length);
         this.callbacks.onConnect.forEach(callback => callback());
         
         // Update UI
+        console.log('Updating connection status to connected');
         this.updateConnectionStatus('connected');
     }
     
@@ -150,8 +153,12 @@ class SolarWebSocket {
     }
     
     updateConnectionStatus(status) {
+        console.log('updateConnectionStatus called with status:', status);
+        
         // Update connection indicator in UI
         const indicator = document.getElementById('connection-status');
+        console.log('Connection status indicator element:', indicator);
+        
         if (indicator) {
             indicator.className = `connection-status status-${status}`;
             
@@ -164,14 +171,21 @@ class SolarWebSocket {
             };
             
             indicator.textContent = messages[status] || status;
+            console.log('Updated connection status to:', messages[status] || status);
+        } else {
+            console.error('Connection status indicator not found in DOM');
         }
         
         // Update system status if available
         const systemStatus = document.getElementById('system-status');
+        console.log('System status element:', systemStatus);
+        
         if (systemStatus && status === 'connected') {
             systemStatus.innerHTML = '<span class="badge bg-success">Online</span>';
+            console.log('Updated system status to Online');
         } else if (systemStatus && status !== 'connected') {
             systemStatus.innerHTML = '<span class="badge bg-warning">Offline</span>';
+            console.log('Updated system status to Offline');
         }
     }
     
@@ -211,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeWebSocket() {
+    console.log('Initializing WebSocket...');
     solarWebSocket = new SolarWebSocket();
     
     // Set up event handlers
@@ -240,7 +255,9 @@ function initializeWebSocket() {
     });
     
     // Connect
+    console.log('Attempting WebSocket connection...');
     solarWebSocket.connect();
+    console.log('WebSocket connection initiated');
 }
 
 function updateDashboardWithRealtimeData(data) {

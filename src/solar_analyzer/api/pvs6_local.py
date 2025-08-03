@@ -1,8 +1,7 @@
 """PVS6 local API client for direct device access."""
 
 import asyncio
-import json
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 
@@ -19,7 +18,7 @@ class PVS6LocalAPI:
         self.base_url = f"http://{self.host}:{self.port}"
         self.timeout = httpx.Timeout(15.0, connect=5.0)
 
-    async def get_device_list(self) -> Dict[str, Any]:
+    async def get_device_list(self) -> dict[str, Any]:
         """Get device list from PVS6."""
         url = f"{self.base_url}/cgi-bin/dl_cgi?Command=DeviceList"
 
@@ -28,7 +27,7 @@ class PVS6LocalAPI:
             response.raise_for_status()
             return response.json()
 
-    async def parse_device_data(self, device_list: Dict[str, Any]) -> Dict[str, Any]:
+    async def parse_device_data(self, device_list: dict[str, Any]) -> dict[str, Any]:
         """Parse device list data into structured format."""
         result = {
             "pvs": None,
@@ -55,7 +54,7 @@ class PVS6LocalAPI:
                 # Handle production meter (positive power)
                 power_kw = float(device.get("p_3phsum_kw", 0))
                 subtype = device.get("subtype", "")
-                
+
                 meter_data = {
                     "serial": device.get("SERIAL", ""),
                     "type": device.get("TYPE", ""),
@@ -67,19 +66,19 @@ class PVS6LocalAPI:
                     "frequency_hz": float(device.get("freq_hz", 0)),
                     "state": device.get("STATE", ""),
                 }
-                
+
                 result["power_meters"].append(meter_data)
-                
+
                 # Track production and consumption
                 if "PRODUCTION" in subtype.upper():
                     result["total_power_kw"] = max(result["total_power_kw"], power_kw)
                 elif "CONSUMPTION" in subtype.upper():
                     result["consumption_kw"] = abs(power_kw)  # Consumption is usually negative
-                    
+
             elif device_type == "Inverter":
                 power_kw = float(device.get("p_3phsum_kw", 0))
                 power_w = power_kw * 1000
-                
+
                 inverter_data = {
                     "serial": device.get("SERIAL", ""),
                     "model": device.get("MODEL", ""),
@@ -97,7 +96,7 @@ class PVS6LocalAPI:
                     "state": device.get("STATE", ""),
                     "datatime": device.get("DATATIME", ""),
                 }
-                
+
                 result["inverters"].append(inverter_data)
 
         # Calculate grid power (production - consumption)
@@ -114,7 +113,7 @@ class PVS6LocalAPI:
         except Exception:
             return 0.0
 
-    async def get_panel_details(self) -> List[Dict[str, Any]]:
+    async def get_panel_details(self) -> list[dict[str, Any]]:
         """Get individual panel/inverter details."""
         try:
             device_list = await self.get_device_list()

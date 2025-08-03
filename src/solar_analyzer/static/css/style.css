@@ -1,18 +1,55 @@
 /* Solar Analyzer Custom Styles */
 
 :root {
-    --primary-color: #0062cc;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --info-color: #17a2b8;
+    /* Solar Energy Color Palette */
+    --solar-gold: #FFD700;
+    --solar-orange: #FF6B35;
+    --energy-blue: #0074D9;
+    --success-green: #2ECC40;
+    --warning-amber: #FF851B;
+    --error-red: #FF4136;
+    --neutral-dark: #2C3E50;
+    --neutral-light: #ECF0F1;
+    
+    /* Solar Gradients */
+    --gradient-solar: linear-gradient(135deg, #FFD700 0%, #FF6B35 100%);
+    --gradient-energy: linear-gradient(135deg, #0074D9 0%, #7FDBFF 100%);
+    --gradient-success: linear-gradient(135deg, #2ECC40 0%, #01FF70 100%);
+    --gradient-warning: linear-gradient(135deg, #FF851B 0%, #FFDC00 100%);
+    --gradient-danger: linear-gradient(135deg, #FF4136 0%, #FF851B 100%);
+    
+    /* Legacy Bootstrap compatibility */
+    --primary-color: var(--energy-blue);
+    --success-color: var(--success-green);
+    --warning-color: var(--warning-amber);
+    --danger-color: var(--error-red);
+    --info-color: var(--energy-blue);
+    
+    /* Typography */
+    --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-display: 'Poppins', var(--font-family-base);
+    
+    /* Spacing and Layout */
+    --border-radius-sm: 6px;
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --shadow-sm: 0 2px 4px rgba(44, 62, 80, 0.08);
+    --shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
+    --shadow-lg: 0 8px 32px rgba(44, 62, 80, 0.24);
+    
+    /* Animation timing */
+    --transition-fast: 0.15s ease-out;
+    --transition-base: 0.3s ease-out;
+    --transition-slow: 0.5s ease-out;
 }
 
 body {
-    background-color: #f8f9fa;
+    font-family: var(--font-family-base);
+    background: linear-gradient(135deg, var(--neutral-light) 0%, #ffffff 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    color: var(--neutral-dark);
 }
 
 main {
@@ -21,13 +58,86 @@ main {
 
 /* Card Enhancements */
 .card {
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-    transition: transform 0.2s;
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
 }
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    box-shadow: var(--shadow);
+}
+
+/* Metric Card Styles */
+.production-card {
+    border-left: 4px solid var(--solar-gold);
+}
+
+.production-card:hover {
+    box-shadow: var(--shadow), 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.consumption-card {
+    border-left: 4px solid var(--energy-blue);
+}
+
+.consumption-card:hover {
+    box-shadow: var(--shadow), 0 0 20px rgba(0, 116, 217, 0.3);
+}
+
+.grid-card {
+    border-left: 4px solid var(--warning-amber);
+}
+
+.grid-card:hover {
+    box-shadow: var(--shadow), 0 0 20px rgba(255, 133, 27, 0.3);
+}
+
+.energy-card {
+    border-left: 4px solid var(--success-green);
+}
+
+.energy-card:hover {
+    box-shadow: var(--shadow), 0 0 20px rgba(46, 204, 64, 0.3);
+}
+
+/* Loading Skeleton Components */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: var(--border-radius-sm);
+}
+
+.skeleton-text {
+    height: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-text.large {
+    height: 2rem;
+}
+
+.skeleton-text.small {
+    height: 0.75rem;
+}
+
+.skeleton-metric {
+    height: 3rem;
+    width: 80%;
+    margin: 0.5rem 0;
+}
+
+.skeleton-chart {
+    height: 300px;
+    width: 100%;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 /* Navigation */
@@ -43,13 +153,128 @@ main {
     transform: translateY(-2px);
 }
 
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    color: var(--neutral-dark);
+}
+
 /* Dashboard Cards */
 .card h2 {
     font-size: 2.5rem;
     font-weight: 300;
+    background: var(--gradient-solar);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* Power Flow Animation */
+/* Smooth Value Transitions */
+.metric-value {
+    transition: all var(--transition-base);
+    display: inline-block;
+}
+
+.metric-value.updating {
+    transform: scale(1.05);
+    color: var(--solar-gold);
+}
+
+.metric-unit {
+    font-size: 0.8em;
+    color: var(--neutral-dark);
+    opacity: 0.7;
+}
+
+/* SVG Power Flow Visualization */
+.power-flow-svg-container {
+    height: 300px;
+    width: 100%;
+}
+
+#power-flow-svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* SVG Node Styles */
+.node-bg.solar {
+    fill: url(#solarGradient);
+    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
+    transition: all var(--transition-base);
+}
+
+.node-bg.home {
+    fill: url(#homeGradient);
+    filter: drop-shadow(0 4px 8px rgba(0, 116, 217, 0.4));
+    transition: all var(--transition-base);
+}
+
+.node-bg.grid {
+    fill: url(#gridGradient);
+    filter: drop-shadow(0 4px 8px rgba(44, 62, 80, 0.4));
+    transition: all var(--transition-base);
+}
+
+.power-node:hover .node-bg {
+    transform: scale(1.1);
+}
+
+/* SVG Text Styles */
+.node-icon {
+    font-size: 20px;
+    fill: white;
+    font-weight: bold;
+}
+
+.node-label {
+    font-size: 12px;
+    fill: white;
+    font-weight: 600;
+    font-family: var(--font-family-display);
+}
+
+.node-value {
+    font-size: 10px;
+    fill: white;
+    font-weight: 500;
+}
+
+/* Flow Line Styles */
+.flow-line {
+    stroke: var(--success-green);
+    stroke-width: 4;
+    stroke-dasharray: 8 4;
+    stroke-linecap: round;
+    transition: all var(--transition-base);
+}
+
+.flow-line.active {
+    animation: flowAnimation 2s linear infinite;
+}
+
+.flow-line.import {
+    stroke: var(--warning-amber);
+}
+
+.flow-line.export {
+    stroke: var(--success-green);
+}
+
+/* Flow Particles */
+.flow-particle {
+    fill: var(--solar-gold);
+    r: 3;
+    opacity: 0.8;
+}
+
+@keyframes flowAnimation {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 24; }
+}
+
+/* Legacy Power Flow (fallback) */
 .power-flow {
     position: relative;
     width: 100%;
@@ -71,22 +296,25 @@ main {
 }
 
 .power-node.solar {
-    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    background: var(--gradient-solar);
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
 }
 
 .power-node.home {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    background: var(--gradient-energy);
     bottom: 20px;
     left: 20%;
+    box-shadow: 0 4px 20px rgba(0, 116, 217, 0.4);
 }
 
 .power-node.grid {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    background: linear-gradient(135deg, var(--neutral-dark) 0%, #34495e 100%);
     bottom: 20px;
     right: 20%;
+    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.4);
 }
 
 .power-flow-line {
@@ -138,18 +366,21 @@ main {
 }
 
 .panel-item.producing {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    background: var(--gradient-success);
     color: white;
+    box-shadow: 0 2px 8px rgba(46, 204, 64, 0.3);
 }
 
 .panel-item.low-production {
-    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    background: var(--gradient-warning);
     color: white;
+    box-shadow: 0 2px 8px rgba(255, 133, 27, 0.3);
 }
 
 .panel-item.not-producing {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: var(--gradient-danger);
     color: white;
+    box-shadow: 0 2px 8px rgba(255, 65, 54, 0.3);
 }
 
 /* Chart Container */

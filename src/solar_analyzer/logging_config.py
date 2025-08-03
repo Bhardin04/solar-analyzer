@@ -2,25 +2,22 @@
 
 import logging
 import logging.config
-import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import structlog
 from rich.console import Console
-from rich.logging import RichHandler
 
 from solar_analyzer.config import settings
-from solar_analyzer.logging_db_handler import DatabaseLogHandler
 
 
 def setup_logging() -> None:
     """Set up structured logging with rich console output."""
-    
+
     # Create logs directory
     log_dir = Path("logs")
     log_dir.mkdir(exist_ok=True)
-    
+
     # Configure structlog
     structlog.configure(
         processors=[
@@ -39,11 +36,11 @@ def setup_logging() -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
-    
+
     # Configure standard logging
     logging_config = get_logging_config()
     logging.config.dictConfig(logging_config)
-    
+
     # Set log levels based on environment
     if settings.app_env == "development":
         logging.getLogger("solar_analyzer").setLevel(logging.DEBUG)
@@ -55,8 +52,53 @@ def setup_logging() -> None:
         logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
 
-def get_logging_config() -> Dict[str, Any]:
+def get_logging_config() -> dict[str, Any]:
     """Get logging configuration dictionary."""
+
+    # Base handlers (always available)
+    handlers = {
+        "console": {
+            "class": "rich.logging.RichHandler",
+            "level": "DEBUG" if settings.app_env == "development" else "INFO",
+            "formatter": "rich",
+            "console": Console(stderr=True),
+            "show_time": True,
+            "show_level": True,
+            "show_path": True,
+            "rich_tracebacks": True,
+            "tracebacks_show_locals": True,
+        },
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "json",
+            "filename": "logs/solar_analyzer.log",
+            "maxBytes": 10485760,  # 10MB
+            "backupCount": 5,
+        },
+        "error_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "ERROR",
+            "formatter": "json",
+            "filename": "logs/errors.log",
+            "maxBytes": 10485760,  # 10MB
+            "backupCount": 5,
+        },
+    }
+
+    # Default logger handlers (without database)
+    base_handlers = ["console", "file", "error_file"]
+
+    # Add database handler if enabled
+    if settings.log_to_database:
+        handlers["database"] = {
+            "()": "solar_analyzer.logging_db_handler.DatabaseLogHandler",
+            "level": "INFO",
+            "batch_size": 50,
+            "flush_interval": 10,
+        }
+        base_handlers.append("database")
+
     return {
         "version": 1,
         "disable_existing_loggers": False,
@@ -74,70 +116,36 @@ def get_logging_config() -> Dict[str, Any]:
                 "datefmt": "[%X]",
             },
         },
-        "handlers": {
-            "console": {
-                "class": "rich.logging.RichHandler",
-                "level": "DEBUG" if settings.app_env == "development" else "INFO",
-                "formatter": "rich",
-                "console": Console(stderr=True),
-                "show_time": True,
-                "show_level": True,
-                "show_path": True,
-                "rich_tracebacks": True,
-                "tracebacks_show_locals": True,
-            },
-            "file": {
-                "class": "logging.handlers.RotatingFileHandler",
-                "level": "INFO",
-                "formatter": "json",
-                "filename": "logs/solar_analyzer.log",
-                "maxBytes": 10485760,  # 10MB
-                "backupCount": 5,
-            },
-            "error_file": {
-                "class": "logging.handlers.RotatingFileHandler",
-                "level": "ERROR",
-                "formatter": "json",
-                "filename": "logs/errors.log",
-                "maxBytes": 10485760,  # 10MB
-                "backupCount": 5,
-            },
-            "database": {
-                "()": "solar_analyzer.logging_db_handler.DatabaseLogHandler",
-                "level": "INFO",
-                "batch_size": 50,
-                "flush_interval": 10,
-            },
-        },
+        "handlers": handlers,
         "loggers": {
             "solar_analyzer": {
                 "level": "DEBUG",
-                "handlers": ["console", "file", "error_file", "database"],
+                "handlers": base_handlers,
                 "propagate": False,
             },
             "uvicorn": {
                 "level": "INFO",
-                "handlers": ["console", "file", "database"],
+                "handlers": ["console", "file"] + (["database"] if settings.log_to_database else []),
                 "propagate": False,
             },
             "uvicorn.error": {
                 "level": "INFO",
-                "handlers": ["console", "file", "error_file", "database"],
+                "handlers": base_handlers,
                 "propagate": False,
             },
             "uvicorn.access": {
                 "level": "INFO",
-                "handlers": ["file", "database"],
+                "handlers": ["file"] + (["database"] if settings.log_to_database else []),
                 "propagate": False,
             },
             "sqlalchemy.engine": {
                 "level": "WARNING",
-                "handlers": ["file", "database"],
+                "handlers": ["file"],  # Exclude database handler to prevent recursive logging
                 "propagate": False,
             },
             "httpx": {
                 "level": "WARNING",
-                "handlers": ["file", "database"],
+                "handlers": ["file"] + (["database"] if settings.log_to_database else []),
                 "propagate": False,
             },
         },

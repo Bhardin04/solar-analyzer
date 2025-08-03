@@ -2,7 +2,7 @@
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Depends, WebSocket
+from fastapi import Depends, FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,7 +12,7 @@ from solar_analyzer.api.websockets import websocket_endpoint
 from solar_analyzer.config import settings
 from solar_analyzer.data.database import engine, get_db
 from solar_analyzer.data.models import Base
-from solar_analyzer.logging_config import setup_logging, get_logger
+from solar_analyzer.logging_config import get_logger, setup_logging
 from solar_analyzer.visualization.dashboard import router as dashboard_router
 
 # Initialize logging
@@ -32,9 +32,9 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error("Failed to initialize database", error=str(e))
         raise
-    
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down Solar Analyzer application")
     await engine.dispose()
