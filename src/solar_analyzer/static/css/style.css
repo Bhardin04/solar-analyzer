@@ -187,7 +187,94 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0.7;
 }
 
-/* Power Flow Animation */
+/* SVG Power Flow Visualization */
+.power-flow-svg-container {
+    height: 300px;
+    width: 100%;
+}
+
+#power-flow-svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* SVG Node Styles */
+.node-bg.solar {
+    fill: url(#solarGradient);
+    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
+    transition: all var(--transition-base);
+}
+
+.node-bg.home {
+    fill: url(#homeGradient);
+    filter: drop-shadow(0 4px 8px rgba(0, 116, 217, 0.4));
+    transition: all var(--transition-base);
+}
+
+.node-bg.grid {
+    fill: url(#gridGradient);
+    filter: drop-shadow(0 4px 8px rgba(44, 62, 80, 0.4));
+    transition: all var(--transition-base);
+}
+
+.power-node:hover .node-bg {
+    transform: scale(1.1);
+}
+
+/* SVG Text Styles */
+.node-icon {
+    font-size: 20px;
+    fill: white;
+    font-weight: bold;
+}
+
+.node-label {
+    font-size: 12px;
+    fill: white;
+    font-weight: 600;
+    font-family: var(--font-family-display);
+}
+
+.node-value {
+    font-size: 10px;
+    fill: white;
+    font-weight: 500;
+}
+
+/* Flow Line Styles */
+.flow-line {
+    stroke: var(--success-green);
+    stroke-width: 4;
+    stroke-dasharray: 8 4;
+    stroke-linecap: round;
+    transition: all var(--transition-base);
+}
+
+.flow-line.active {
+    animation: flowAnimation 2s linear infinite;
+}
+
+.flow-line.import {
+    stroke: var(--warning-amber);
+}
+
+.flow-line.export {
+    stroke: var(--success-green);
+}
+
+/* Flow Particles */
+.flow-particle {
+    fill: var(--solar-gold);
+    r: 3;
+    opacity: 0.8;
+}
+
+@keyframes flowAnimation {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 24; }
+}
+
+/* Legacy Power Flow (fallback) */
 .power-flow {
     position: relative;
     width: 100%;

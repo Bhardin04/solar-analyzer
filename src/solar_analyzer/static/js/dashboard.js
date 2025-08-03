@@ -151,6 +151,11 @@ function updateCurrentValues(reading) {
     updateElement('#current-production', formatNumber(reading.production_kw || 0, 2), '', ' kW');
     updateElement('#current-consumption', formatNumber(reading.consumption_kw || 0, 2), '', ' kW');
     
+    // Update power flow visualization
+    if (window.powerFlowViz) {
+        powerFlowViz.updatePowerFlow(reading);
+    }
+    
     const gridValue = reading.grid_kw || 0;
     updateElement('#grid-status', formatNumber(Math.abs(gridValue), 2), '', ' kW');
     
@@ -249,26 +254,10 @@ function updateSystemStatus(status) {
     statusElement.innerHTML = badge;
 }
 
-// Create power flow visualization
+// Legacy power flow function - now handled by power-flow.js
+// Kept for compatibility but unused
 function createPowerFlow(production, consumption, grid) {
-    const container = document.getElementById('power-flow-container');
-    
-    // This is a simplified version - you could create a more complex
-    // animated SVG visualization here
-    container.innerHTML = `
-        <div class="power-flow">
-            <div class="power-node solar">
-                <i class="fas fa-sun"></i>
-                <span>${formatNumber(production, 1)} kW</span>
-            </div>
-            <div class="power-node home">
-                <i class="fas fa-home"></i>
-                <span>${formatNumber(consumption, 1)} kW</span>
-            </div>
-            <div class="power-node grid">
-                <i class="fas fa-plug"></i>
-                <span>${formatNumber(Math.abs(grid), 1)} kW</span>
-            </div>
-        </div>
-    `;
+    // Power flow is now handled by the PowerFlowVisualization class
+    // in power-flow.js - this function is deprecated
+    console.log('Legacy createPowerFlow called - using new SVG visualization instead');
 }
